@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Niffy Cakes - Everything you need.</title>
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/x-icon" href="static/images/favicon.png" />
+  <!-- bootstrap.min css -->
+  <link rel="stylesheet" href="static/plugins/bootstrap/css/bootstrap.min.css">
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="static/css/style.css">
+</head>
+
+<body id="body">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        {% if category == 'error' %}
+        <div class="alert alert-danger alert-dismissable fade show" role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% else %}
+        <div class="alert alert-success alert-dismissable fade show" role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white w-100 navigation" id="navbar">
+  <div class="container">
+    <a class="navbar-brand font-weight-bold" href="/"><img src="static/images/cakes2.png" alt="Niffy Cakes" class="img-fluid"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse " id="main-navbar">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Home </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contact">Contact Us</a>
+        </li>
+      </ul>
+    </div>
+    <!-- Navbar-collapse -->
+  </div>
+</nav>
+
+  <div class="checkout shopping">
+     <div class="container">
+        <div class="row">
+         <!-- Order sidebar Summary -->
+         <div class="col-md-6 col-lg-4">
+            <div class="product-checkout-details mt-5 mt-lg-0">
+               <br>
+               <h4 class="mb-4 border-bottom pb-4">Order Summary</h4>
+
+               {% for item in cart %}
+               <div class="mb-4">
+                  <h5>{{ item.title }} - <span>₦{{ item['price']|int }}</span></h5>
+                  <div class="d-flex justify-content-between align-items-center mt-2">
+                    <form action="{{ url_for('decrease_quantity', cake_id=item.id) }}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-secondary btn-sm">-</button>
+                    </form>
+                    <span class="mx-2">{{ item.quantity }}</span>
+                    <form action="{{ url_for('increase_quantity', cake_id=item.id) }}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-secondary btn-sm">+</button>
+                    </form>
+                  </div>
+                  <form action="{{ url_for('remove_from_cart', cake_id=item.id) }}" method="post" style="display:inline;">
+                      <button type="submit" class="btn btn4 btn-sm mt-2">Remove</button>
+                  </form>
+               </div>
+               {% endfor %}
+
+               <ul class="summary-prices list-unstyled mb-4">
+                  <li class="d-flex justify-content-between">
+                     <span>Subtotal:</span>
+                     <span class="h5">₦{{ total_price }}</span>
+                  </li>
+                  <li class="d-flex justify-content-between">
+                     <span>Delivery Fee:</span>
+                     <span class="h5">₦1,000</span>
+                  </li>
+                  <li class="d-flex justify-content-between">
+                     <span>Total</span>
+                     <span class="h5">₦{{ total_plus_1000 }}</span>
+                  </li>
+               </ul>
+
+               <form method="POST" action="/cancel_cart">
+                 <button type="submit" class="btn btn-main">Cancel Cart</button>
+               </form>
+            </div>
+         </div>
+         
+         <div class="col-lg-8 pr-5">
+           <div class="coupon-notice " data-toggle="modal" data-target="#coupon-modal">
+             <br>
+             <div class="bg-light p-3">
+                 Call To Order - 0803 853 2023
+             </div>
+           </div>
+
+           <div class="billing-details mt-5">
+             <form class="checkout-form" method="POST" action="/submit_form"> 
+                 <div class="row">  
+                  {% for item in cart %}
+                  <input type="hidden" name="item_titles[]" value="{{ item.title }}">
+                  <input type="hidden" name="item_prices[]" value="₦{{ item['price']|int }}">
+                  <input type="hidden" name="item_quantities[]" value="{{ item.quantity }}">
+                  {% endfor %}
+                    <div class="col-lg-6">
+                        <div class="form-group mb-4">
+                          <label for="first_name">Name</label>
+                          <input type="text" name="name" class="form-control" id="first_name" placeholder="" required>
+                       </div>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <div class="form-group mb-4">
+                          <label for="first_name">Street Address</label>
+                          <input type="text" name="address" class="form-control" id="street" placeholder="" required>
+                       </div>
+                    </div>
+                    
+                     <div class="col-lg-12">
+                        <div class="form-group mb-4">
+                          <label for="first_name">Phone </label>
+                          <input type="text" name="phone" class="form-control" id="phone" placeholder="" required>
+                       </div>
+                    </div>
+ 
+                    <div class="col-lg-12">
+                        <div class="form-group mb-4">
+                          <label for="first_name">Order notes (optional)</label>
+                          <textarea class="form-control" id="msg" cols="30" rows="5" name="message" placeholder="Notes about order e:g: want to say something" required></textarea>
+                       </div> 
+                    </div>
+
+                    <input type="hidden" name="item_total[]" value="₦{{ total_price }}">
+                    <input type="hidden" name="delivery[]" value="₦{{ total_plus_1000 }}">
+                    <div class="side-button">
+                    <button type="submit" class="btn btn-main">Place Order</button>
+                    </div>
+                 </div>
+              </form>
+           </div>
+         </div>   
+        </div>
+     </div>
+  </div>
+
+<div class="footer-btm py-4 ">
+  <div class="container">
+    <div class="row ">
+      <div class="col-lg-6">
+          <p>Copyright ©  <script>
+            var CurrentYear = new Date().getFullYear()
+            document.write(CurrentYear)
+            </script>, created by <a href="#">Nathaniel Ademola.</a></p>
+      </div>
+     </div>
+  </div>
+</div>
+
+<!-- 
+Essential Scripts
+=====================================-->
+<!-- Main jQuery -->
+<script src="static/plugins/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 4.3.1 -->
+<script src="static/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/plugins/bootstrap-slider/bootstrap-slider.min.js"></script>
+<!-- Main Js File -->
+<script src="static/js/script.js"></script>
+
+</body>
+</html>

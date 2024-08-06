@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Niffy Cakes - Everything you need.</title>
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='/images/favicon.png') }}" />
+<!-- bootstrap.min css -->
+<link rel="stylesheet" href="{{ url_for('static', filename='plugins/bootstrap/css/bootstrap.min.css') }}">
+<!-- Main Stylesheet -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+
+</head>
+
+<body id="body">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white w-100 navigation" id="navbar">
+  <div class="container">
+    <a class="navbar-brand font-weight-bold" href="/"><img src="{{ url_for('static', filename='images/cakes2.png') }}" alt="NIFFY CAKES"
+        class="img-fluid"></a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar"
+      aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse " id="main-navbar">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{{ url_for('index') }}">Home </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('contact') }}">Contact Us</a>
+        </li>
+
+      {% if 'cart' in session and session['cart'][session.sid] %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('view_cart') }}">Cart</a>
+        </li>
+      {% endif %}
+      </ul>
+    </div>
+    <!-- Navbar-collapse -->
+
+    <ul class="top-menu list-inline mb-0 d-none d-lg-block" id="top-menu">
+      <li class="dropdown cart-nav dropdown-slide list-inline-item">
+        <a href="/cart" class="dropdown-toggle cart-icon">
+          <i class="tf-ion-android-cart"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+
+<!--search overlay start-->
+<div class="search-wrap">
+  <div class="overlay">
+    <form action="#" class="search-form">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-10 col-9">
+            <input type="text" class="form-control" placeholder="Search..." />
+          </div>
+          <div class="col-md-2 col-3 text-right">
+            <div class="search_toggle toggle-wrap d-inline-block">
+              <img class="search-close" src="static/images/close.png" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!--search overlay end-->
+
+<section class="single-product">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-5">
+				<div class="single-product-slider">
+					<div class="carousel slide" data-ride="carousel" id="single-product-slider">
+						<div class="carousel-inner">
+							<div class="carousel-item active">
+								<img src="{{ url_for('static', filename='cakes_img/' + cake.image) }}" alt="{{ cake.title }}" class="img-fluid">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-md-7">
+				<div class="single-product-details mt-5 mt-lg-0">
+					<h2>{{ cake.title }}</h2>
+					<hr>
+					<h3 class="product-price">₦{{ cake.high_price }} <del>₦{{ cake.low_price }}</del></h3>
+
+          <form class="cart" action="{{ url_for('add_to_cart', cake_id=cake.id) }}" method="POST">
+            <div class="big-text">
+                <div class="quantity d-flex align-items-center">
+                    <button type="submit" class="btn btn-main btn-small">Add to Cart</button>
+                </div>
+            </div>
+        </form>
+        <p>{{ cake.description1 }}</p>
+
+        <p>{{ cake.description2 }}</p>
+				</div>
+			</div>
+		</div>
+
+    {% if current_user.is_authenticated %}
+    <form method="POST" action="{{ url_for('delete_cake', cake_id=cake.id) }}">
+      <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+    {% endif %}
+
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h3 class="description">Description</h3>
+
+				<div class="tab-content" id="nav-tabContent">
+				  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+					<p>{{ cake.description }}</p>
+				  </div>
+				</div> 
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<div class="footer-btm py-4 ">
+	<div class="container">
+		<div class="row ">
+	     	<div class="col-lg-6">
+          <p>Copyright ©  <script>
+            var CurrentYear = new Date().getFullYear()
+            document.write(CurrentYear)
+            </script>, created by <a href="#">Nathaniel Ademola.</a></p>
+	     	</div>
+	     </div>
+	</div>
+</div>
+
+
+    <!-- 
+    Essential Scripts
+    =====================================-->
+    
+    <script src="{{ url_for('static', filename='plugins/jquery/dist/jquery.min.js') }}"></script>
+    <!-- Bootstrap 4.3.1 -->
+    <script src="{{ url_for('static', filename='plugins/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/bootstrap-slider/bootstrap-slider.min.js') }}"></script>
+    <!-- Main Js File -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>    
+
+  </body>
+  </html>
