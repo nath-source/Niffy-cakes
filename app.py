@@ -139,15 +139,11 @@ from flask import session
 # 'add_to_cart' route
 @app.route('/add_to_cart/<int:cake_id>', methods=['POST'])
 def add_to_cart(cake_id):
-    try:
-        if 'cart' not in session:
-            session['cart'] = {}
+    if 'cart' not in session:
+        session['cart'] = {}
 
-        cake = Cake.query.get(cake_id)
-        if not cake:
-            flash('Cake not found', 'danger')
-            return redirect(url_for('index'))
-
+    cake = Cake.query.get(cake_id)
+    if cake:
         try:
             price = float(cake.high_price.replace(',', ''))  # Ensure price is converted to a float
         except ValueError:
@@ -177,13 +173,10 @@ def add_to_cart(cake_id):
 
         session.modified = True  # Ensure the session is saved after modification
         flash('Item added to the cart', 'success')
-
-    except Exception as e:
-        flash(f"An error occurred: {str(e)}", 'danger')
+    else:
+        flash('Cake not found', 'danger')
 
     return redirect(url_for('index'))
-
-
 
 # 'view_cart' route
 @app.route('/cart')
