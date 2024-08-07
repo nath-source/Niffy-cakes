@@ -324,7 +324,7 @@ def contact_form():
     # Extract form data
     subject = "Nathaniel - Message From Your Website"
     sender = "nathanielademola499@gmail.com"
-    recipients = ["nathanieln69@gmail.com"]
+    recipients = ["nathanielademola499@gmail.com"]
     password = "cadf mkse ldzs jtxh"
 
     name = request.form.get('name')
