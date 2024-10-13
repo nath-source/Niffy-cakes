@@ -9,7 +9,7 @@ import smtplib
 from email.mime.text import MIMEText
 
 app = Flask(__name__, template_folder="templates")
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:cOpyarGO56,@niffy-database.cveaaey865r1.eu-north-1.rds.amazonaws.com/niffy'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:cOpyarGO56,niffy-database.cveaaey865r1.eu-north-1.rds.amazonaws.com/niffy'
 app.config['SECRET_KEY'] = 'adehhtt56cssdv'
 
 app.config['SESSION_TYPE'] = 'filesystem'
